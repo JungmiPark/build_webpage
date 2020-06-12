@@ -21,8 +21,10 @@
 		UPDATE MEMBER SET USERNAME=#{username}, PHONE=#{phone} WHERE
 		USERID=#{userid}
 	</update>
-	<delete id="delmember" parameterType="com.example.vo.memberVO">
-		DELETE FROM MEMBER WHERE USERID=#{userid}
+	<delete id="delmemberbatch" parameterType="String">
+		<foreach open="DELETE FROM MEMBER WHERE USERID IN(" close=")" collection="array" item="tmp" separator=",">
+			#{tmp}
+		</foreach>
 	</delete>
 	<select id="memberOne" parameterType="com.example.vo.memberVO"
 		resultType="com.example.vo.memberVO">

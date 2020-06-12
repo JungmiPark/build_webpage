@@ -12,6 +12,7 @@
 		rel="stylesheet" />
 </head>
 <body>
+관리자 HOME
 	<div class="container">
 		<a href="/admin/itemlist">물품목록보기</a> 
 		<a href="/admin/iteminsert">물품일괄등록</a>

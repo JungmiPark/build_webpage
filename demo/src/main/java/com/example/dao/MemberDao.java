@@ -23,4 +23,7 @@ public class MemberDao {
 		public memberVO selectMemberLogin(memberVO obj) {
 			return sqlFactory.openSession().selectOne("Member.login", obj);
 		}
+		public int deleteMemberBatch(String[] userid) {
+			return sqlFactory.openSession().delete("Member.delmemberbatch", userid);
+		}
 }

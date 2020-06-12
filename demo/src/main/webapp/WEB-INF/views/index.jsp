@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	index 페이지 입니다.
+	HOME 
 	
 	<c:if test="${sessionScope.SESSION_ID eq null}">
 		<a href="/member/login">로그인</a>

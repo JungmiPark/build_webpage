@@ -17,13 +17,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.example.dao.ItemDAO;
+import com.example.dao.MemberDao;
 import com.example.vo.ItemVO;
+import com.example.vo.memberVO;
 
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
 	@Autowired
 	private ItemDAO iDAO = null;
+	@Autowired
+	private MemberDao mDAO = null;
 
 	@RequestMapping(value = "/home")
 	public String home() {
@@ -113,6 +117,25 @@ public class AdminController {
 		iDAO.updateItemBatch(list);
 		return "redirect:/admin/itemlist";
 	}
+	@RequestMapping(value = "/member")
+	public String memberlist(Model model) {				
+		List<memberVO> list = mDAO.selectMemberList();
+	
+		model.addAttribute("list", list); //hashmap<key, value> Controller -> VO로 값 전달
+		return "/admin/member";
+	}	
+	
+	@RequestMapping(value = "/member", method=RequestMethod.POST)
+	public String deletememberbatch(@RequestParam("btn") String btn, @RequestParam(value = "chk[]", required = false) String[] userid) {
+		
+		if(btn.equals("일괄삭제")) {
+			
+			mDAO.deleteMemberBatch(userid);			
+		}
+		return "redirect:/admin/member";
+	}
+	
+	
 //	@RequestMapping(value = "/home")
 //	public String home() {
 //		return "/admin/home";
