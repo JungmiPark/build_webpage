@@ -27,6 +27,9 @@ import com.example.vo.BoardVO;
 @RequestMapping(value = "/board")
 public class BoardController {
 
+	
+	
+	
 	@Autowired
 	private BoardDAO bDAO =null;
 	
