@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.dao.BoardDAO;
 import com.example.dao.ItemDAO;
+import com.example.dao.OrderDAO;
+import com.example.vo.BoardVO;
 import com.example.vo.ItemVO;
+import com.example.vo.OrderVO;
 
 @CrossOrigin("*")  //CORS 해제
 @RestController
@@ -21,6 +25,39 @@ public class RestItemController {
 	
 	@Autowired
 	private ItemDAO iDAO = null;
+	
+	@Autowired
+	private OrderDAO oDAO = null;
+	
+	@Autowired
+	private BoardDAO bDAO = null;
+	
+	@RequestMapping(value="/rest/itemorder.json", method = {RequestMethod.GET, RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody HashMap<String, Object> itemOrder() {
+		List<OrderVO> list = oDAO.selectItemOrder();
+		// String str = ['사과', 50] , ['귤', 87]
+		
+//		String str = "aaa"; //String.format("['data1', %d]", name, cnt);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("ret", list);
+		return map;
+	}
+	
+	@RequestMapping(value="/rest/board.json", method = {RequestMethod.GET, RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody HashMap<String, Object> board(@RequestParam(value="page", defaultValue = "1", required = false) int page) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		HashMap<String, Object> map2 = new HashMap<String, Object>();
+		
+		map.put("start", page*10-9);
+		map.put("end", page*10);		
+		
+		List<BoardVO> list = bDAO.selectBoardList(map);
+				
+		map2.put("ret", list);
+		
+		return map2;
+	}
 	
 	//127.0.0.1:8080/rest/itemsearch.json?txt=사과&key=abc
 	@RequestMapping(value="/rest/itemsearch.json", method = {RequestMethod.GET, RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)

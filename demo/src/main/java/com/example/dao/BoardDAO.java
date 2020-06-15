@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.vo.BoardVO;
 
+
 public interface BoardDAO {
 	public int insertBoard(BoardVO obj); //글쓰기
 	public List<BoardVO> selectBoard(HashMap<String, Object> map);
@@ -18,4 +19,5 @@ public interface BoardDAO {
 	public int insertBatch(List<BoardVO> list);
 	
 	public BoardVO selectBoardImg(int no);
+	public List<BoardVO> selectBoardList(HashMap<String, Object> map);
 	}

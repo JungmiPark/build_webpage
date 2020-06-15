@@ -62,7 +62,7 @@ public class MemberController {
 
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String joinpost(@ModelAttribute memberVO obj) {
-		System.out.println(obj.toString());
+//		System.out.println(obj.toString());
 		int ret = mDAO.insertMember(obj);
 
 		if (ret > 0) { // 회원가입 성공시

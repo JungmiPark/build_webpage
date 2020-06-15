@@ -134,7 +134,18 @@ public class AdminController {
 		}
 		return "redirect:/admin/member";
 	}
-	
+	// http://127.0.0.1:8080/admin/itemdeleteone?no=39
+	@RequestMapping(value = "/itemdeleteone")
+	public String itemdeleteone(@RequestParam(value = "no", defaultValue = "0") int no) {
+		System.out.println(no);
+		iDAO.deleteItemOne(no);
+		
+		return "redirect:/admin/itemlist";
+	}
+	@RequestMapping(value = "/itemorder")
+	public String itemorder() {
+		return "/admin/itemorder";
+	}
 	
 //	@RequestMapping(value = "/home")
 //	public String home() {

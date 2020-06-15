@@ -63,5 +63,10 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public BoardVO selectBoardImg(int no) {
 		return sqlFactory.openSession().selectOne("Board.selectBoardImg", no);
-	};
+	}
+	
+	@Override
+	public List<BoardVO> selectBoardList(HashMap<String, Object> map){
+		return sqlFactory.openSession().selectList("Board.selectBoardList", map);
+	}
 }

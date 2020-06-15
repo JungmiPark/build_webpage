@@ -72,4 +72,8 @@
 		)
 		WHERE itemno IN (<foreach collection="list" item="obj" separator=",">#{obj.itemno}</foreach>)
 	</update>
+	<delete id="deleteItemOne" parameterType="int">
+		DELETE FROM ITEM WHERE ITEMNO = #{no}
+	</delete>
+
 </mapper>

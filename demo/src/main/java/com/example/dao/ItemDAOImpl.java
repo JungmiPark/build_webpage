@@ -59,8 +59,9 @@ public class ItemDAOImpl implements ItemDAO{
 	public int deleteItemBatch(int[] no) {		
 		return sqlFactory.openSession().delete("Item.deleteItemBatch", no);
 	}
-
-
-	
+	@Override
+	public int deleteItemOne(int no) {
+		return sqlFactory.openSession().delete("Item.deleteItemOne", no);
+	}	
 
 }
