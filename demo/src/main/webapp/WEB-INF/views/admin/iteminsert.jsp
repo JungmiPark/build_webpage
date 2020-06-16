@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div class="container">
-		<form action="/admin/iteminsert" method="post">
+		<form action="${pageContext.request.contextPath}/admin/iteminsert" method="post">
 		<table class="table table-sm">
 			<c:forEach var="i" begin="1" end="5" step="1">
 			<tr>				
