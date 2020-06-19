@@ -13,11 +13,14 @@ public interface BoardDAO {
 	public int updateBoard(BoardVO obj);
 	public int deleteBoard(BoardVO obj);
 	
-	public int countBoard(); //전체 게시글 수 구하기
+	public int countBoard(String text); //전체 게시글 수 구하기
 	public int updateHit(int no);// 조회수 - 글번호가 넘어오면 1증가
 	
 	public int insertBatch(List<BoardVO> list);
 	
 	public BoardVO selectBoardImg(int no);
 	public List<BoardVO> selectBoardList(HashMap<String, Object> map);
+	
+	public int selectBoardPrev(int no);
+	public int selectBoardNext(int no);
 	}

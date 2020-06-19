@@ -33,21 +33,19 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public int updateBoard(BoardVO obj) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateBoard(BoardVO obj) {		
+		return sqlFactory.openSession().update("Board.updateBoardOne", obj);
 	}
 
 	@Override
-	public int deleteBoard(BoardVO obj) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteBoard(BoardVO obj) {		
+		return sqlFactory.openSession().delete("Board.deleteBoard", obj);
 	}
 	
 	@Override
-	public int countBoard() {
+	public int countBoard(String text) {
 		
-		return sqlFactory.openSession().selectOne("Board.count");		
+		return sqlFactory.openSession().selectOne("Board.count", text);		
 	}
 
 	@Override
@@ -68,5 +66,15 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public List<BoardVO> selectBoardList(HashMap<String, Object> map){
 		return sqlFactory.openSession().selectList("Board.selectBoardList", map);
+	}
+	
+	@Override
+	public int selectBoardPrev(int no) {		
+		return sqlFactory.openSession().selectOne("Board.selectBoardPrev", no);
+	}
+	
+	@Override
+	public int selectBoardNext(int no) {		
+		return sqlFactory.openSession().selectOne("Board.selectBoardNext", no);
 	}
 }

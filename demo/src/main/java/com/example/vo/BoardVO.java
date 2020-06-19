@@ -5,8 +5,8 @@ public class BoardVO {
 	private String brd_title = null; 
 	private String brd_content = null;  
 	private byte[] brd_img = null; //BLOB 
-	private String brd_id = null; 
 	private long brd_hit = 0L; 
+	private String brd_id = null; 
 	private String brd_date = null; 
 	
 	public long getBrd_no() {
@@ -33,17 +33,17 @@ public class BoardVO {
 	public void setBrd_img(byte[] brd_img) {
 		this.brd_img = brd_img;
 	}
-	public String getBrd_id() {
-		return brd_id;
-	}
-	public void setBrd_id(String brd_id) {
-		this.brd_id = brd_id;
-	}
 	public long getBrd_hit() {
 		return brd_hit;
 	}
 	public void setBrd_hit(long brd_hit) {
 		this.brd_hit = brd_hit;
+	}
+	public String getBrd_id() {
+		return brd_id;
+	}
+	public void setBrd_id(String brd_id) {
+		this.brd_id = brd_id;
 	}
 	public String getBrd_date() {
 		return brd_date;
@@ -54,7 +54,7 @@ public class BoardVO {
 	@Override
 	public String toString() {
 		return "BoardVO [brd_no=" + brd_no + ", brd_title=" + brd_title + ", brd_content=" + brd_content + ", brd_img=" + brd_img
-				+ ", brd_id=" + brd_id + ", brd_hit=" + brd_hit + ", brd_date=" + brd_date + "]";
+				+ ", brd_hit=" + brd_hit + ", brd_id=" + brd_id + ", brd_date=" + brd_date + "]";
 	}
 
 }

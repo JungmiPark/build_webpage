@@ -1,12 +1,15 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,21 +24,57 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.dao.BoardDAO;
+import com.example.mapper.BoardMapper;
 import com.example.vo.BoardVO;
 
 @Controller
 @RequestMapping(value = "/board")
 public class BoardController {
-
-	
 	
 	
 	@Autowired
 	private BoardDAO bDAO =null;
+//	@Autowired
+//	private BoardMapper boardMapper =null;
+	
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	public String update(HttpServletRequest request, Model model, @RequestParam(value="no", defaultValue="0") int no) {
+		BoardVO vo = bDAO.selectBoardOne(no);		
+		model.addAttribute("vo", vo);		
+		return "/board/update";
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(HttpServletRequest request, @ModelAttribute BoardVO obj, @RequestParam MultipartFile[] img) throws IOException{
+		
+		if(img != null) {
+			for(MultipartFile one : img) {
+				if(one.getSize() > 0) {
+					obj.setBrd_img(one.getBytes());
+				}				
+			}
+		}
+		bDAO.updateBoard(obj);		
+		
+		return "redirect:" + request.getContextPath() + "/board/content?no=" + obj.getBrd_no();
+	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String delete(HttpServletRequest request, @RequestParam(value="no", defaultValue="0") int no) {
+		BoardVO obj = new BoardVO();
+		obj.setBrd_no(no);
+		int ret = bDAO.deleteBoard(obj);
+//		int ret = boardMapper.deleteBoard(obj);
+		if(ret > 0) {
+			return "redirect:" + request.getContextPath() + "/board/list";
+		}
+		return "redirect:" + request.getContextPath() + "/board/content?no=" + no;
+	}
+	
 	
 	//127.0.0.1:8080/board/getimg?no=11
 	@RequestMapping(value="/getimg")
-	public ResponseEntity<byte[]> getimg(@RequestParam("no") int no) {
+	public ResponseEntity<byte[]> getimg(@RequestParam("no") int no, HttpServletRequest request) {
 		BoardVO obj = bDAO.selectBoardImg(no);
 		try {
 			if (obj.getBrd_img().length > 0) {
@@ -46,8 +85,15 @@ public class BoardController {
 			}
 			return null;
 		}catch(Exception e){
-			System.err.println("error");
-			return null;
+			try{//InputStream in = request.getServletContext().getResourceAsStream() -> /src/main/webapp
+			InputStream in = request.getServletContext().getResourceAsStream("/resources/img/default.jpg");
+			HttpHeaders header = new HttpHeaders();
+			header.setContentType(MediaType.IMAGE_JPEG);
+			ResponseEntity<byte[]> ret = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), header, HttpStatus.OK);
+			return ret;
+			}catch(Exception e1) {
+				return null;
+			}
 		}
 	}
 	
@@ -84,21 +130,26 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(Model model, HttpSession httpSession, @RequestParam(value="page", defaultValue = "1", required = false) int page) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
+	public String list(Model model, HttpSession httpSession, HttpServletRequest request ,
+			@RequestParam(value="page", defaultValue = "0", required = false) int page,
+			@RequestParam(value="text", defaultValue = "", required = false) String text) {
 		
 		
-		map.put("start", page*10-9);
-		map.put("end", page*10);
-		
+		if(page==0) {
+			return "redirect:"+request.getContextPath()+"/board/list?page=1";
+		}
 		httpSession.setAttribute("SESSION_BOARD_HIT_CHECK", 1);
 		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("start", page*7-6);
+		map.put("end", page*7);
+		map.put("text", text);		
+		
 		List<BoardVO> list = bDAO.selectBoard(map);
-		
-		int cnt = bDAO.countBoard();
-		
 		model.addAttribute("list", list);
-		model.addAttribute("cnt", (cnt-1)/10+1);
+		
+		int cnt = bDAO.countBoard(text);		
+		model.addAttribute("cnt", (cnt-1)/7+1);
 		//System.out.println((int)
 		return "/board/list";		
 	}
@@ -116,9 +167,15 @@ public class BoardController {
 			httpSession.setAttribute("SESSION_BOARD_HIT_CHECK", 0);
 		}
 		
-		BoardVO obj = bDAO.selectBoardOne(no);
-		
+		BoardVO obj = bDAO.selectBoardOne(no);		
 		model.addAttribute("obj", obj);
+		
+		int p = bDAO.selectBoardPrev(no);
+		model.addAttribute("prev", p);
+		
+		int n = bDAO.selectBoardNext(no);
+		model.addAttribute("next", n);
+		
 		return "/board/content";
 	}
 	

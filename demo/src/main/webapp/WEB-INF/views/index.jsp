@@ -5,7 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Home</title>
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.css"  rel="stylesheet"/>
 </head>
 <body>
 	HOME 
@@ -13,6 +14,7 @@
 	<c:if test="${sessionScope.SESSION_ID eq null}">
 		<a href="/member/login">로그인</a>
 		<a href="/member/join">회원가입</a>
+		<a href="/board/list">글목록</a>
 	</c:if>
 	
 	<c:if test="${sessionScope.SESSION_ID ne null}">
